@@ -1,0 +1,22 @@
+:root {
+  --caramel: #d0a87d;
+  --caramel-dark: #b8906a;
+  --rose: #efbcab;
+  --amber: #f9b429;
+  --cream: #fdf8f4;
+  --white: #ffffff;
+  --text: #3d2318;
+  --muted: #9a7060;
+  --border: #ead8cc;
+  --radius: 12px;
+  --shadow: 0 2px 12px rgba(90,50,30,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
