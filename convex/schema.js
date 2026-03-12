@@ -14,6 +14,7 @@ export default defineSchema({
     client: v.string(),
     phone: v.optional(v.string()),
     obs: v.optional(v.string()),
+    deliveryDate: v.optional(v.string()),
     lines: v.array(v.object({
       productId: v.string(),
       productName: v.string(),
@@ -22,8 +23,7 @@ export default defineSchema({
       filling: v.optional(v.string()),
     })),
     total: v.number(),
-    status: v.string(), // Pendente | Pago | Pronto | Entregue
+    status: v.string(),
     date: v.string(),
-    deliveryDate: v.optional(v.string()),
   }),
 });

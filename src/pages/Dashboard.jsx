@@ -11,48 +11,30 @@ function stag(s) {
   return { background: "#ffebee", color: "#c62828" };
 }
 
-const statStyle = (bg) => ({
-  background: bg || "var(--white)", border: "1.5px solid var(--border)",
-  borderRadius: "var(--radius)", padding: "16px 14px", textAlign: "center",
-  boxShadow: "var(--shadow)",
-});
-
 export default function Dashboard() {
   const orders = useQuery(api.orders.list) ?? [];
-
   const total = orders.reduce((s, o) => s + o.total, 0);
   const paid = orders.filter(o => o.status === "Pago" || o.status === "Entregue").reduce((s, o) => s + o.total, 0);
   const pending = orders.filter(o => o.status === "Pendente").length;
   const recent = orders.slice(0, 5);
 
-  const statVal = (color) => ({ fontSize: "1.8rem", fontWeight: 900, color: color || "var(--text)", lineHeight: 1 });
-  const statLabel = (color) => ({ fontSize: 10, fontWeight: 800, color: color || "var(--muted)", letterSpacing: .8, textTransform: "uppercase", marginTop: 4 });
+  const Stat = ({ val, label, bg }) => (
+    <div style={{ background: bg || "var(--white)", border: bg ? "none" : "1.5px solid var(--border)", borderRadius: "var(--radius)", padding: "16px 14px", textAlign: "center", boxShadow: "var(--shadow)" }}>
+      <div style={{ fontSize: typeof val === "string" ? "1.1rem" : "1.8rem", fontWeight: 900, color: bg ? "#fff" : "var(--text)", lineHeight: 1 }}>{val}</div>
+      <div style={{ fontSize: 10, fontWeight: 800, color: bg ? "rgba(255,255,255,.8)" : "var(--muted)", letterSpacing: .8, textTransform: "uppercase", marginTop: 4 }}>{label}</div>
+    </div>
+  );
 
   return (
     <div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
-        <div style={statStyle()}>
-          <div style={statVal()}>{orders.length}</div>
-          <div style={statLabel()}>Pedidos</div>
-        </div>
-        <div style={{ ...statStyle("var(--caramel)"), border: "none" }}>
-          <div style={{ ...statVal("#fff"), fontSize: "1.1rem" }}>{fmtMoney(total)}</div>
-          <div style={statLabel("rgba(255,255,255,.8)")}>Faturamento</div>
-        </div>
-        <div style={{ ...statStyle("var(--rose)"), border: "none" }}>
-          <div style={{ ...statVal("#fff"), fontSize: "1.1rem" }}>{fmtMoney(paid)}</div>
-          <div style={statLabel("rgba(255,255,255,.8)")}>Recebido</div>
-        </div>
-        <div style={{ ...statStyle("var(--amber)"), border: "none" }}>
-          <div style={statVal("#fff")}>{pending}</div>
-          <div style={statLabel("rgba(255,255,255,.8)")}>Pendentes</div>
-        </div>
+        <Stat val={orders.length} label="Pedidos" />
+        <Stat val={fmtMoney(total)} label="Faturamento" bg="var(--caramel)" />
+        <Stat val={fmtMoney(paid)} label="Recebido" bg="var(--rose)" />
+        <Stat val={pending} label="Pendentes" bg="var(--amber)" />
       </div>
-
       <div style={{ background: "var(--white)", borderRadius: "var(--radius)", padding: 16, boxShadow: "var(--shadow)", border: "1.5px solid var(--border)" }}>
-        <div style={{ fontSize: 13, fontWeight: 900, color: "var(--muted)", textTransform: "uppercase", letterSpacing: .8, marginBottom: 14 }}>
-          Últimos Pedidos
-        </div>
+        <div style={{ fontSize: 13, fontWeight: 900, color: "var(--muted)", textTransform: "uppercase", letterSpacing: .8, marginBottom: 14 }}>Últimos Pedidos</div>
         {!recent.length
           ? <div style={{ textAlign: "center", padding: 32, color: "var(--muted)", fontWeight: 700 }}>Nenhum pedido ainda</div>
           : recent.map(o => (

@@ -22,7 +22,6 @@ export default function Production() {
       return new Date(a.deliveryDate) - new Date(b.deliveryDate);
     });
 
-  // Aggregate by product
   const map = {};
   filtered.forEach(order => {
     order.lines.forEach(line => {
@@ -40,12 +39,11 @@ export default function Production() {
 
   return (
     <div>
-      {/* Filter chips */}
       <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 14 }}>
         {FILTERS.map(f => (
           <button key={f} onClick={() => setFilter(f)} style={{
             padding: "7px 14px", borderRadius: 20, fontSize: 12, fontWeight: 800,
-            border: "2px solid var(--border)", cursor: "pointer", transition: "all .15s",
+            border: "2px solid var(--border)", cursor: "pointer",
             background: filter === f ? "var(--caramel)" : "var(--white)",
             color: filter === f ? "#fff" : "var(--muted)",
             borderColor: filter === f ? "var(--caramel)" : "var(--border)",
@@ -56,7 +54,6 @@ export default function Production() {
       {!filtered.length
         ? <div style={{ textAlign: "center", padding: 40, color: "var(--muted)", fontWeight: 700 }}>Nenhum pedido encontrado</div>
         : <>
-          {/* Summary */}
           <div style={{ background: "var(--white)", borderRadius: "var(--radius)", padding: 16, marginBottom: 12, border: "1.5px solid var(--border)", boxShadow: "var(--shadow)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
               <div style={{ fontSize: 12, fontWeight: 800, color: "var(--muted)", textTransform: "uppercase", letterSpacing: .8 }}>Total a produzir</div>
@@ -64,16 +61,14 @@ export default function Production() {
                 {totalUnits} <span style={{ fontSize: 14, color: "var(--muted)", fontWeight: 700 }}>peças</span>
               </div>
             </div>
-            <div style={{ textAlign: "right", fontSize: 12, fontWeight: 800, color: "var(--muted)", textTransform: "uppercase", letterSpacing: .6 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "var(--muted)", textTransform: "uppercase" }}>
               {filtered.length} pedido{filtered.length !== 1 ? "s" : ""}
             </div>
           </div>
 
-          {/* Per product */}
           {Object.entries(map).map(([name, data]) => {
             const rows = Object.entries(data.byFilling);
             const hasFillings = !(rows.length === 1 && rows[0][0] === "__none__");
-
             return (
               <div key={name} style={{ background: "var(--white)", borderRadius: "var(--radius)", marginBottom: 12, border: "1.5px solid var(--border)", overflow: "hidden", boxShadow: "var(--shadow)" }}>
                 <div style={{ background: "var(--caramel)", color: "#fff", padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -83,18 +78,13 @@ export default function Production() {
                     <div style={{ fontSize: 10, opacity: .8, fontWeight: 700, textTransform: "uppercase" }}>unidades</div>
                   </div>
                 </div>
-
                 {rows.map(([fname, fdata]) => (
                   <div key={fname} style={{ padding: "10px 16px", borderBottom: "1px solid var(--border)" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                      <div style={{ fontWeight: 700, fontSize: 14, color: "var(--text)" }}>
-                        {hasFillings ? fname : "—"}
-                      </div>
-                      <div style={{ fontSize: "1.3rem", fontWeight: 900, color: "var(--caramel)", minWidth: 36, textAlign: "right" }}>
-                        {fdata.qty}×
-                      </div>
+                      <div style={{ fontWeight: 700, fontSize: 14, color: "var(--text)" }}>{hasFillings ? fname : "—"}</div>
+                      <div style={{ fontSize: "1.3rem", fontWeight: 900, color: "var(--caramel)", minWidth: 36, textAlign: "right" }}>{fdata.qty}×</div>
                     </div>
-                    <div style={{ marginTop: 5, display: "flex", flexDirection: "column", gap: 3 }}>
+                    <div style={{ marginTop: 5, display: "flex", flexDirection: "column", gap: 4 }}>
                       {fdata.clients.map((c, i) => (
                         <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12 }}>
                           <span style={{ color: "var(--muted)" }}>{c.name} ({c.qty}×)</span>

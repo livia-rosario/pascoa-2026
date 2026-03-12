@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useQuery, useMutation } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -20,7 +20,7 @@ export default function App() {
   const seedProducts = useMutation(api.products.seed);
 
   useEffect(() => {
-    if (auth) seedProducts();
+    if (auth) seedProducts().catch(() => {});
   }, [auth]);
 
   if (!auth) return <Login onLogin={() => { localStorage.setItem("za", "1"); setAuth(true); }} />;
