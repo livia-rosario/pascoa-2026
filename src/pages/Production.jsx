@@ -4,11 +4,23 @@ import { api } from "../../convex/_generated/api";
 
 const FILTERS = ["Todos", "Pendente", "Pago", "Pronto", "Entregue"];
 
+function fmtDate(d) {
+  if (!d) return null;
+  return new Date(d).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", weekday: "short" });
+}
+
 export default function Production() {
   const orders = useQuery(api.orders.list) ?? [];
   const [filter, setFilter] = useState("Todos");
 
-  const filtered = filter === "Todos" ? orders : orders.filter(o => o.status === filter);
+  const filtered = (filter === "Todos" ? orders : orders.filter(o => o.status === filter))
+    .slice()
+    .sort((a, b) => {
+      if (!a.deliveryDate && !b.deliveryDate) return 0;
+      if (!a.deliveryDate) return 1;
+      if (!b.deliveryDate) return -1;
+      return new Date(a.deliveryDate) - new Date(b.deliveryDate);
+    });
 
   // Aggregate by product
   const map = {};
@@ -20,7 +32,7 @@ export default function Production() {
       const fkey = line.filling || "__none__";
       if (!map[k].byFilling[fkey]) map[k].byFilling[fkey] = { qty: 0, clients: [] };
       map[k].byFilling[fkey].qty += line.qty;
-      map[k].byFilling[fkey].clients.push(order.client);
+      map[k].byFilling[fkey].clients.push({ name: order.client, deliveryDate: order.deliveryDate, qty: line.qty });
     });
   });
 
@@ -64,7 +76,6 @@ export default function Production() {
 
             return (
               <div key={name} style={{ background: "var(--white)", borderRadius: "var(--radius)", marginBottom: 12, border: "1.5px solid var(--border)", overflow: "hidden", boxShadow: "var(--shadow)" }}>
-                {/* Header */}
                 <div style={{ background: "var(--caramel)", color: "#fff", padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div style={{ fontWeight: 900, fontSize: 15 }}>{name}</div>
                   <div style={{ textAlign: "right" }}>
@@ -73,19 +84,27 @@ export default function Production() {
                   </div>
                 </div>
 
-                {/* Rows */}
                 {rows.map(([fname, fdata]) => (
-                  <div key={fname} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 16px", borderBottom: "1px solid var(--border)" }}>
-                    <div>
+                  <div key={fname} style={{ padding: "10px 16px", borderBottom: "1px solid var(--border)" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                       <div style={{ fontWeight: 700, fontSize: 14, color: "var(--text)" }}>
                         {hasFillings ? fname : "—"}
                       </div>
-                      <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>
-                        {fdata.clients.join(" · ")}
+                      <div style={{ fontSize: "1.3rem", fontWeight: 900, color: "var(--caramel)", minWidth: 36, textAlign: "right" }}>
+                        {fdata.qty}×
                       </div>
                     </div>
-                    <div style={{ fontSize: "1.3rem", fontWeight: 900, color: "var(--caramel)", minWidth: 36, textAlign: "right" }}>
-                      {fdata.qty}×
+                    <div style={{ marginTop: 5, display: "flex", flexDirection: "column", gap: 3 }}>
+                      {fdata.clients.map((c, i) => (
+                        <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12 }}>
+                          <span style={{ color: "var(--muted)" }}>{c.name} ({c.qty}×)</span>
+                          {c.deliveryDate && (
+                            <span style={{ background: "var(--amber)", color: "#fff", padding: "1px 8px", borderRadius: 20, fontSize: 11, fontWeight: 800 }}>
+                              {fmtDate(c.deliveryDate)}
+                            </span>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))}

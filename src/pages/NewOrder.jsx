@@ -23,6 +23,7 @@ export default function NewOrder({ onNavigate }) {
   const [client, setClient] = useState("");
   const [phone, setPhone] = useState("");
   const [obs, setObs] = useState("");
+  const [deliveryDate, setDeliveryDate] = useState("");
   const [lines, setLines] = useState([{ productId: "", qty: 1, filling: "" }]);
 
   const updateLine = (i, key, val) => {
@@ -52,9 +53,10 @@ export default function NewOrder({ onNavigate }) {
     await addOrder({
       client: client.trim(), phone: phone.trim(), obs: obs.trim(),
       lines: orderLines, total: orderTotal, status: "Pendente",
+      deliveryDate: deliveryDate || "",
       date: new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }),
     });
-    setClient(""); setPhone(""); setObs(""); setLines([{ productId: "", qty: 1, filling: "" }]);
+    setClient(""); setPhone(""); setObs(""); setDeliveryDate(""); setLines([{ productId: "", qty: 1, filling: "" }]);
     alert("Pedido salvo!");
     onNavigate("orders");
   }
@@ -69,11 +71,12 @@ export default function NewOrder({ onNavigate }) {
         {[
           { label: "Nome", val: client, set: setClient, placeholder: "Nome completo" },
           { label: "WhatsApp", val: phone, set: setPhone, placeholder: "(27) 99999-0000" },
+          { label: "Data de Entrega", val: deliveryDate, set: setDeliveryDate, placeholder: "", type: "date" },
           { label: "Observações", val: obs, set: setObs, placeholder: "Opcional..." },
         ].map(f => (
           <div key={f.label} style={{ marginBottom: 11 }}>
             <label style={lbl}>{f.label}</label>
-            <input type="text" value={f.val} onChange={e => f.set(e.target.value)} placeholder={f.placeholder} style={inp} />
+            <input type={f.type || "text"} value={f.val} onChange={e => f.set(e.target.value)} placeholder={f.placeholder} style={inp} />
           </div>
         ))}
       </div>

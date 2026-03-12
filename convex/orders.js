@@ -20,6 +20,7 @@ export const add = mutation({
     total: v.number(),
     status: v.string(),
     date: v.string(),
+    deliveryDate: v.optional(v.string()),
   },
   handler: async ({ db }, args) => {
     return await db.insert("orders", args);

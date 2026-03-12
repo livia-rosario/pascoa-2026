@@ -24,5 +24,6 @@ export default defineSchema({
     total: v.number(),
     status: v.string(), // Pendente | Pago | Pronto | Entregue
     date: v.string(),
+    deliveryDate: v.optional(v.string()),
   }),
 });

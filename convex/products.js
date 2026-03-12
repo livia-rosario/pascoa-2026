@@ -37,14 +37,14 @@ export const seed = mutation(async ({ db }) => {
   });
   await db.insert("products", {
     name: "Ovo Plano Nuts",
-    price: 49,
+    price: 35,
     desc: "Chocolate nobre coberto com mix de nuts e frutas secas",
     hasFillings: false,
     fillings: [],
   });
   await db.insert("products", {
     name: "Ovo Plano Recheado",
-    price: 55,
+    price: 40,
     desc: "Chocolate nobre com recheio à escolha",
     hasFillings: true,
     fillings: [

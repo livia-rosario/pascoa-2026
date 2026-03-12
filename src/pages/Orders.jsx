@@ -62,7 +62,10 @@ export default function Orders() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
               <div>
                 <div style={{ fontWeight: 800, fontSize: 14 }}>{o.client}{o.phone ? " · " + o.phone : ""}</div>
-                <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2, fontWeight: 600 }}>{o.date}</div>
+                <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2, fontWeight: 600 }}>
+                  Pedido: {o.date}
+                  {o.deliveryDate && <span style={{ marginLeft: 8, background: "var(--amber)", color: "#fff", padding: "1px 8px", borderRadius: 20, fontWeight: 800 }}>Entrega: {new Date(o.deliveryDate).toLocaleDateString("pt-BR")}</span>}
+                </div>
               </div>
               <div style={{ textAlign: "right" }}>
                 <div style={{ fontWeight: 900, fontSize: 15, color: "var(--caramel)" }}>{fmtMoney(o.total)}</div>
