@@ -7,7 +7,8 @@ function fmtMoney(v) {
 }
 function fmtDate(d) {
   if (!d) return null;
-  return new Date(d).toLocaleDateString("pt-BR");
+  const [year, month, day] = d.split("-");
+  return `${day}/${month}/${year}`;
 }
 function stag(s) {
   if (s === "Entregue") return { background: "#e8f5e9", color: "#2e7d32" };

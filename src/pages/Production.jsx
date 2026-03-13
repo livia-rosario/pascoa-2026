@@ -6,7 +6,10 @@ const FILTERS = ["Todos", "Pendente", "Pago", "Pronto", "Entregue"];
 
 function fmtDate(d) {
   if (!d) return null;
-  return new Date(d).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", weekday: "short" });
+  const [year, month, day] = d.split("-");
+  const weekdays = ["dom","seg","ter","qua","qui","sex","sáb"];
+  const date = new Date(Number(year), Number(month)-1, Number(day));
+  return `${weekdays[date.getDay()]} ${day}/${month}`;
 }
 
 export default function Production() {

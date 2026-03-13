@@ -62,12 +62,25 @@ export default function NewOrder({ onNavigate }) {
         {[
           { label: "Nome", val: client, set: setClient, placeholder: "Nome completo", type: "text" },
           { label: "WhatsApp", val: phone, set: setPhone, placeholder: "(27) 99999-0000", type: "text" },
-          { label: "Data de Entrega", val: deliveryDate, set: setDeliveryDate, placeholder: "", type: "date" },
+          { label: "Data de Entrega", val: deliveryDate, set: setDeliveryDate, placeholder: "", type: "date", isPascoa: true },
           { label: "Observações", val: obs, set: setObs, placeholder: "Opcional...", type: "text" },
         ].map(f => (
           <div key={f.label} style={{ marginBottom: 11 }}>
             <label style={lbl}>{f.label}</label>
-            <input type={f.type} value={f.val} onChange={e => f.set(e.target.value)} placeholder={f.placeholder} style={inp} />
+            {f.isPascoa ? (
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <input type="date" value={f.val} onChange={e => f.set(e.target.value)} style={{ ...inp, flex: 1 }} />
+                <button type="button" onClick={() => f.set("2026-04-05")} style={{
+                  padding: "11px 12px", background: f.val === "2026-04-05" ? "var(--amber)" : "#fdf4ef",
+                  border: "2px solid var(--border)", borderRadius: "var(--radius)",
+                  fontSize: 12, fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap",
+                  color: f.val === "2026-04-05" ? "#fff" : "var(--text)", fontFamily: "inherit",
+                  borderColor: f.val === "2026-04-05" ? "var(--amber)" : "var(--border)",
+                }}>Dia da Páscoa</button>
+              </div>
+            ) : (
+              <input type={f.type} value={f.val} onChange={e => f.set(e.target.value)} placeholder={f.placeholder} style={inp} />
+            )}
           </div>
         ))}
       </div>
