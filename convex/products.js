@@ -18,6 +18,20 @@ export const add = mutation({
   },
 });
 
+export const update = mutation({
+  args: {
+    id: v.id("products"),
+    name: v.string(),
+    price: v.number(),
+    desc: v.string(),
+    hasFillings: v.boolean(),
+    fillings: v.array(v.string()),
+  },
+  handler: async ({ db }, { id, ...rest }) => {
+    await db.patch(id, rest);
+  },
+});
+
 export const remove = mutation({
   args: { id: v.id("products") },
   handler: async ({ db }, { id }) => {

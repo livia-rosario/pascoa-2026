@@ -27,6 +27,27 @@ export const add = mutation({
   },
 });
 
+export const update = mutation({
+  args: {
+    id: v.id("orders"),
+    client: v.string(),
+    phone: v.optional(v.string()),
+    obs: v.optional(v.string()),
+    deliveryDate: v.optional(v.string()),
+    lines: v.array(v.object({
+      productId: v.string(),
+      productName: v.string(),
+      price: v.number(),
+      qty: v.number(),
+      filling: v.optional(v.string()),
+    })),
+    total: v.number(),
+  },
+  handler: async ({ db }, { id, ...rest }) => {
+    await db.patch(id, rest);
+  },
+});
+
 export const updateStatus = mutation({
   args: { id: v.id("orders"), status: v.string() },
   handler: async ({ db }, { id, status }) => {

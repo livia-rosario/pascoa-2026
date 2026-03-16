@@ -6,11 +6,13 @@ import Dashboard from "./pages/Dashboard";
 import Production from "./pages/Production";
 import NewOrder from "./pages/NewOrder";
 import Orders from "./pages/Orders";
+import Products from "./pages/Products";
 
 const TABS = [
   { id: "dashboard", label: "Painel" },
   { id: "production", label: "Produção" },
   { id: "orders", label: "Pedidos" },
+  { id: "products", label: "Produtos" },
 ];
 
 export default function App() {
@@ -24,7 +26,7 @@ export default function App() {
 
   if (!auth) return <Login onLogin={() => { localStorage.setItem("za", "1"); setAuth(true); }} />;
 
-  const pages = { dashboard: Dashboard, production: Production, "new-order": NewOrder, orders: Orders };
+  const pages = { dashboard: Dashboard, production: Production, "new-order": NewOrder, orders: Orders, products: Products };
   const Page = pages[tab];
 
   return (
@@ -36,19 +38,12 @@ export default function App() {
       }}>
         <img src="/logo.png" alt="Zuca" style={{ height: 30 }} />
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{
-            background: "var(--amber)", color: "#fff", fontSize: 11,
-            fontWeight: 900, letterSpacing: 1, padding: "3px 10px",
-            borderRadius: 20, textTransform: "uppercase",
-          }}>Páscoa 2026</span>
-          <button onClick={() => { localStorage.removeItem("za"); setAuth(false); }} style={{
-            background: "none", border: "2px solid var(--border)", color: "var(--muted)",
-            padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 800, cursor: "pointer",
-          }}>Sair</button>
+          <span style={{ background: "var(--amber)", color: "#fff", fontSize: 11, fontWeight: 900, letterSpacing: 1, padding: "3px 10px", borderRadius: 20, textTransform: "uppercase" }}>Páscoa 2026</span>
+          <button onClick={() => { localStorage.removeItem("za"); setAuth(false); }} style={{ background: "none", border: "2px solid var(--border)", color: "var(--muted)", padding: "5px 12px", borderRadius: 20, fontSize: 12, fontWeight: 800, cursor: "pointer" }}>Sair</button>
         </div>
       </header>
 
-      {/* Big New Order Button */}
+      {/* Botão Novo Pedido destacado */}
       <div style={{ background: "var(--white)", borderBottom: "2px solid var(--border)", padding: "10px 14px" }}>
         <div style={{ maxWidth: 680, margin: "0 auto" }}>
           <button onClick={() => setTab("new-order")} style={{
@@ -61,13 +56,10 @@ export default function App() {
         </div>
       </div>
 
-      <nav style={{
-        background: "var(--white)", display: "flex",
-        borderBottom: "2px solid var(--border)", position: "sticky", top: 55, zIndex: 99,
-      }}>
+      <nav style={{ background: "var(--white)", display: "flex", borderBottom: "2px solid var(--border)", position: "sticky", top: 105, zIndex: 99, scrollbarWidth: "none", overflowX: "auto" }}>
         {TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} style={{
-            flex: 1, padding: "10px 6px 8px", border: "none", background: "none",
+            flex: 1, minWidth: 70, padding: "10px 6px 8px", border: "none", background: "none",
             fontSize: 11, fontWeight: 800, cursor: "pointer", letterSpacing: .3,
             textTransform: "uppercase", transition: "all .2s",
             color: tab === t.id ? "var(--caramel)" : "var(--muted)",
