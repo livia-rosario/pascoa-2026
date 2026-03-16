@@ -10,7 +10,6 @@ import Orders from "./pages/Orders";
 const TABS = [
   { id: "dashboard", label: "Painel" },
   { id: "production", label: "Produção" },
-  { id: "new-order", label: "Novo Pedido" },
   { id: "orders", label: "Pedidos" },
 ];
 
@@ -49,14 +48,26 @@ export default function App() {
         </div>
       </header>
 
+      {/* Big New Order Button */}
+      <div style={{ background: "var(--white)", borderBottom: "2px solid var(--border)", padding: "10px 14px" }}>
+        <div style={{ maxWidth: 680, margin: "0 auto" }}>
+          <button onClick={() => setTab("new-order")} style={{
+            width: "100%", padding: "14px", cursor: "pointer", fontFamily: "inherit",
+            background: tab === "new-order" ? "var(--caramel-dark)" : "var(--caramel)",
+            color: "#fff", border: "none", borderRadius: "var(--radius)",
+            fontSize: 16, fontWeight: 900, letterSpacing: .5,
+            boxShadow: "0 4px 16px rgba(208,168,125,0.35)", transition: "background .2s",
+          }}>+ Novo Pedido</button>
+        </div>
+      </div>
+
       <nav style={{
-        background: "var(--white)", display: "flex", overflowX: "auto",
+        background: "var(--white)", display: "flex",
         borderBottom: "2px solid var(--border)", position: "sticky", top: 55, zIndex: 99,
-        scrollbarWidth: "none",
       }}>
         {TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} style={{
-            flex: 1, minWidth: 70, padding: "10px 6px 8px", border: "none", background: "none",
+            flex: 1, padding: "10px 6px 8px", border: "none", background: "none",
             fontSize: 11, fontWeight: 800, cursor: "pointer", letterSpacing: .3,
             textTransform: "uppercase", transition: "all .2s",
             color: tab === t.id ? "var(--caramel)" : "var(--muted)",
