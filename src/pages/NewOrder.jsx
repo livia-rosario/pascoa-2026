@@ -93,10 +93,15 @@ export default function NewOrder({ onNavigate }) {
           return (
             <div key={i} style={{ borderBottom: "1px solid var(--border)", paddingBottom: 10, marginBottom: 10 }}>
               <div style={{ display: "flex", gap: 7, alignItems: "center", flexWrap: "wrap" }}>
-                <select value={line.productId || prod?._id} onChange={e => updateLine(i, "productId", e.target.value)} style={{ ...inp, flex: 1, minWidth: 140 }}>
+                <select value={line.productId || ""} onChange={e => updateLine(i, "productId", e.target.value)} style={{ ...inp, flex: 1, minWidth: 140 }}>
+                  <option value="" disabled>Escolher produto...</option>
                   {products.map(p => <option key={p._id} value={p._id}>{p.name} – {fmtMoney(p.price)}</option>)}
                 </select>
-                <input type="number" min="1" value={line.qty} onChange={e => updateLine(i, "qty", Math.max(1, parseInt(e.target.value) || 1))} style={{ ...inp, width: 60 }} />
+                <div style={{ display: "flex", alignItems: "center", border: "2px solid var(--border)", borderRadius: "var(--radius)", overflow: "hidden" }}>
+                  <button onClick={() => updateLine(i, "qty", Math.max(1, line.qty - 1))} style={{ padding: "10px 13px", background: "#fdf4ef", border: "none", fontSize: 16, fontWeight: 900, cursor: "pointer", color: "var(--caramel)" }}>−</button>
+                  <span style={{ padding: "0 12px", fontWeight: 900, fontSize: 15, minWidth: 32, textAlign: "center" }}>{line.qty}</span>
+                  <button onClick={() => updateLine(i, "qty", line.qty + 1)} style={{ padding: "10px 13px", background: "#fdf4ef", border: "none", fontSize: 16, fontWeight: 900, cursor: "pointer", color: "var(--caramel)" }}>+</button>
+                </div>
                 <div style={{ fontWeight: 900, color: "var(--caramel)", fontSize: 13, minWidth: 68, textAlign: "right" }}>{fmtMoney(lt)}</div>
                 {lines.length > 1 && <button onClick={() => setLines(lines.filter((_, idx) => idx !== i))} style={{ padding: "7px 10px", background: "#fff0ee", border: "2px solid #f5c0b8", color: "#c0392b", borderRadius: "var(--radius)", fontSize: 12, fontWeight: 800, cursor: "pointer" }}>✕</button>}
               </div>
